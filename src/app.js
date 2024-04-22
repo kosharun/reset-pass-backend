@@ -31,7 +31,7 @@ async function main() {
             age: 30,
         },
     });
-    console.log(newUser);
+    console.log(student);
 }
 
 // main();
