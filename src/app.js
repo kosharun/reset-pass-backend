@@ -1,8 +1,9 @@
 /*  */
-
-/* const PrismaClient = require("@prisma/client");
+const {PrismaClient} = require("@prisma/client");
+const cors = require('cors');
 
 const prisma = new PrismaClient();
+/* 
 
 async function main() {
     const allStudents = await prisma.student.findMany();
@@ -23,12 +24,13 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
+app.use(cors());
+
 async function main() {
     const student = await prisma.student.create({
         data: {
-            name: "Alice",
-            email: "alice@example.com",
-            age: 30,
+            email: "kosharun04@gmail.com",
+            password: "harunkos"
         },
     });
     console.log(student);

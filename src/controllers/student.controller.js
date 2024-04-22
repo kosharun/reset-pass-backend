@@ -43,16 +43,18 @@ const changePassword = async (req, res) => {
         const { token } = req.params;
 
         // Find the student by token
-        const student = await prisma.student.findFirst({
+        const students = await prisma.student.findMany({
             where: {
                 token: token,
             },
         });
 
         // Check if the student exists
-        if (!student) {
+        if (students.length === 0) {
             return res.status(404).json({ message: "Student not found" });
-        }
+        }        
+        const student = students[0];
+
 
         if(!isTokenExpired(student.tokenExpiresAt)) {
             const newPassword = Math.floor(Math.random() * 1000000) + 10000; // gen random password
@@ -63,14 +65,13 @@ const changePassword = async (req, res) => {
                     id: student.id,
                 },
                 data: {
-                    password: newPassword.toString(),
-                    token: "", // remove ability to change password more times
+                    password: newPassword.toString()
                 },
             });
 
             res.status(200).json({ password: updatedStudent.password });
         } else {
-            res.error("Token expired after 2 minutes, try again!");
+            console.error("Token expired after 2 minutes, try again!");
         }
     } catch (error) {
         console.error("Error changing password:", error);
