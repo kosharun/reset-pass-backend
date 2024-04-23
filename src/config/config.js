@@ -1,8 +1,8 @@
 module.exports = {
     google: {
         email: "kosharun04@gmail.com",
-        clientID: "479543307000-1k293funs1kv048ugg7tjep4da3kscoe.apps.googleusercontent.com",
-        clientSecret: "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",
-        refreshToken: "1//04M5pNuGz_G7JCgYIARAAGAQSNwF-L9IrFbr5B9xbEdyfv0dcN2ngiYXuJPeB-fTNaCJCr0GTSHEueIkNuVj_Kz7UIDOSnBHtfFs",
+        clientID: "86570495373-1i6mq4lu20cq1uon4cgt5ikrbreu10c9.apps.googleusercontent.com",
+        clientSecret: "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",
+        refreshToken: "1//04SYsfF3bqCUrCgYIARAAGAQSNwF-L9IrBDEvKO1pSBj5IqpmIMPEf8qKHmFtIaXf8lVuajmnR1ZxdORSX-zE9HmARC5_Rpw1qZo",
     },
 };

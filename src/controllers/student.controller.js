@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 const sendEmail = require("./sendEmail"); // Adjust the path as necessary
+const { google } = require("../config/config");
 
 const updateStudentCode = async (req, res) => {
     try {
@@ -30,20 +31,18 @@ const updateStudentCode = async (req, res) => {
         });
         console.log("Student code updated:", updatedStudent);
         const code = updatedStudent.code.toString();
-        const emailOptions = {
+        res.send(200).json({code: code});
+        /* const emailOptions = {
             from: google.email, // Sender address
             to: email, // Receiver address
             subject: "Your Code Update", // Subject line
             text: `Your code has been updated. Your new code is: ${code}`, // Plain text body
             // html: "<b>Your code has been updated. Your new code is:</b> <code>${code}</code>", // HTML body
         };
+        console.log(google.email);
 
-        try {
-            await sendEmail(emailOptions);
-            console.log("Email sent successfully");
-        } catch (error) {
-            console.error("Error sending email:", error);
-        }
+        await sendEmail(emailOptions); */
+        
     } catch (error) {
         console.error("Error updating student code:", error);
         throw error;
