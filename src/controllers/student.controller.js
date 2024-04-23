@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
+const sendEmail = require("./sendEmail"); // Adjust the path as necessary
 
 const updateStudentCode = async (req, res) => {
     try {
@@ -14,9 +15,9 @@ const updateStudentCode = async (req, res) => {
             },
         });
 
-        if (!student) { 
+        if (!student) {
             console.log("Student not found!");
-        } 
+        }
 
         const updatedStudent = await prisma.student.update({
             where: {
@@ -29,8 +30,20 @@ const updateStudentCode = async (req, res) => {
         });
         console.log("Student code updated:", updatedStudent);
         const code = updatedStudent.code.toString();
-        // ovde implementirati nodemailer da se salje na const email
+        const emailOptions = {
+            from: google.email, // Sender address
+            to: email, // Receiver address
+            subject: "Your Code Update", // Subject line
+            text: `Your code has been updated. Your new code is: ${code}`, // Plain text body
+            // html: "<b>Your code has been updated. Your new code is:</b> <code>${code}</code>", // HTML body
+        };
 
+        try {
+            await sendEmail(emailOptions);
+            console.log("Email sent successfully");
+        } catch (error) {
+            console.error("Error sending email:", error);
+        }
     } catch (error) {
         console.error("Error updating student code:", error);
         throw error;
@@ -55,29 +68,31 @@ const changePassword = async (req, res) => {
         // Check if the student exists
         if (students.length === 0) {
             return res.status(404).json({ message: "Student not found" });
-        }        
+        }
         const student = students[0];
 
-        if(isCodeExpired(student.codeExpiresAt)) {
+        if (isCodeExpired(student.codeExpiresAt)) {
             console.error("Code expired after 2 minutes, try again!");
         }
 
         const newPassword = Math.floor(Math.random() * 1000000) + 10000; // gen random password
 
-            // Update the student's password
-            const updatedStudent = await prisma.student.update({
-                where: {
-                    code: code
-                },
-                data: {
-                    password: newPassword.toString()
-                },
-            });
+        // Update the student's password
+        const updatedStudent = await prisma.student.update({
+            where: {
+                code: code,
+            },
+            data: {
+                password: newPassword.toString(),
+            },
+        });
 
-            res.status(200).json({ password: updatedStudent.password });
+        res.status(200).json({ password: updatedStudent.password });
     } catch (error) {
         console.error("Error changing password:", error);
-        res.status(500).json({ message: "An error occurred while changing the password" });
+        res.status(500).json({
+            message: "An error occurred while changing the password",
+        });
     }
 };
 
